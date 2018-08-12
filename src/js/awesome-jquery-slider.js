@@ -1,5 +1,8 @@
 $(function() {
 
+
+
+
 	var methods = {
     init : function( options ) {
 
@@ -12,11 +15,10 @@ $(function() {
 
 
 
-			// Base
 
       currentSlide = 0;
       countThumbnails = lastThumbnails = 3;
-			autoplayCurrentSlide = 0;
+			autoplay = false;
 
       $(this).addClass('awesome-slider').children().wrap('<div class="awesome-slider_item"></div>');
       slide = $(this).find('.awesome-slider_item');
@@ -28,7 +30,7 @@ $(function() {
 
       nav = $('.awesome-slider_navigation');
 
-      nav.append('<div class="awesome-slider_thumbnails-list"></div>');
+      nav.append('<div class="awesome-slider_thumbnails-viewport"><div class="awesome-slider_thumbnails-list"></div></div>');
       thumbnailsList = nav.find('.awesome-slider_thumbnails-list');
 
 
@@ -49,14 +51,9 @@ $(function() {
       })
 
       thumbnails = thumbnailsList.find('.awesome-slider_thumbnail');
-      thumbnails.first().addClass('is-active');
+
 
       thumbnails.click(function(){
-
-        thumbnails.removeClass('is-active');
-
-        $(this).addClass('is-active');
-
         $(this).awesomeSlider('getCurrentSlide', $(this).attr('data-index'))
 
       })
@@ -65,36 +62,39 @@ $(function() {
 			// Apply options
 
 			if (settings.cover === true) slide.addClass('awesome-slider_item__cover');
-
+      if (settings.autoplay == true){
+        $(this).awesomeSlider('autoPlay');
+      }
 
     },
 
     nextThumbnails : function( ) {
       if (lastThumbnails < countSlide - 1){
         lastThumbnails += 1;
-        // 20 width
-        // 2.5 m-x
-        // (2.5*2)/20*100=25.0
-        translateX = 125 * (lastThumbnails - 3);
-        thumbnails.each(function()
-        {
-          $(this).css('transform','translateX(-' + translateX + '%)');
-        });
+        translateX = 25 * (lastThumbnails - 3);
+        thumbnailsList.css('transform','translateX(-' + translateX + '%)');
       }
     },
     prevThumbnails : function( ) {
       if (lastThumbnails => countThumbnails){
         lastThumbnails -= 1;
-        translateX = 125 * (lastThumbnails - 3);
-        thumbnails.each(function()
-        {
-          $(this).css('transform','translateX(-' + translateX + '%)');
-        });
+        translateX = 25 * (lastThumbnails - 3);
+        thumbnailsList.css('transform','translateX(-' + translateX + '%)');
       }
     },
     nextSlide : function( ) {
+
       currentSlide += 1;
+
+      thumbnails.removeClass('is-active');
+      $(thumbnails[currentSlide]).addClass('is-active');
+
       translateX = 100 * currentSlide;
+
+      if (currentSlide === countSlide){
+        currentSlide = 0;
+        translateX = 0;
+      }
       slide.each(function()
       {
         $(this).css('transform','translateX(-' + translateX + '%)');
@@ -102,16 +102,38 @@ $(function() {
     },
 
     prevSlide : function( ) {
+
       currentSlide -= 1;
+
+      thumbnails.removeClass('is-active');
+      $(thumbnails[currentSlide]).addClass('is-active');
+
       translateX = 100 * currentSlide;
       slide.each(function()
       {
         $(this).css('transform','translateX(-' + translateX + '%)');
       });
     },
+    autoPlay : function( ){
+      thumbnails.removeClass('is-active');
 
+      if (autoplay == false){
+          autoplay = true;
+          autoPlayInterval = setInterval(function () {
+            $(this).awesomeSlider('nextSlide')
+          }, 5000);
+      }
+      else{
+          autoplay = false;
+          clearInterval(autoPlayInterval);
+      }
+    },
     getCurrentSlide : function( slideNumber ) {
+      thumbnails.removeClass('is-active');
+      currentSlide = slideNumber - 1;
+
       translateX = slideNumber * 100;
+      $(thumbnails[slideNumber]).addClass('is-active');
 
       slide.each(function()
       {

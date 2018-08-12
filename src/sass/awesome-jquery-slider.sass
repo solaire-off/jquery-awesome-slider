@@ -27,21 +27,23 @@
   margin: 1.2rem auto
   position: relative
   padding: 0 2rem
+  .awesome-slider_thumbnails-viewport
+    overflow-x: hidden
   .awesome-slider_thumbnails-list
     display: flex
-    overflow-x: hidden
     width: 100%
+    transition: transform 0.3s ease-in-out
   .awesome-slider_thumbnail
     flex-shrink: 0
     width: 20%
-    margin: 0 2.5%;
+    margin:  0 2.5%
     height: 80px
-    transition: transform 0.3s ease-in-out
     cursor: pointer
     position: relative
     z-index: 11
+    object-fit: cover
     &.is-active
-      opacity: 0.55
+      opacity: 0.5
 
 .awesome-slider_arrow
   position: absolute

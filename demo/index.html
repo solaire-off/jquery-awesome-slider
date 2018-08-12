@@ -92,12 +92,12 @@ $(function() {
             <td>true</td>
             <td>The replaced content is sized to maintain its aspect ratio while filling the element’s entire content box. If the object's aspect ratio does not match the aspect ratio of its box, then the object will be clipped to fit.</td>
           </tr>
-          <!-- <tr> -->
-          <!--   <td>autoplay</td> -->
-          <!--   <td>boolean</td> -->
-          <!--   <td>false</td> -->
-          <!--   <td>When present, the image slider will automatically start move.</td> -->
-          <!-- </tr> -->
+          <tr>
+            <td>autoplay</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>When present, the image slider will automatically start move.</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -117,6 +117,11 @@ $('#my-slider').awesomeSlider("method name","option");
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td>.autoPlay()</td>
+            <td>none</td>
+            <td>toggle image slider autoplay</td>
+          </tr>
           <tr>
             <td>.nextThumbnails()</td>
             <td>none</td>
@@ -142,13 +147,11 @@ $('#my-slider').awesomeSlider("method name","option");
             <td>number</td>
             <td>switching to image by number</td>
           </tr>
+
         </tbody>
       </table>
     </div>
     <h2>Dependencies</h2>
-    <ul>
-      <li>Jquery</li>
-    </ul>
     <p class="text-center">Tested with jQuery v3.3.1</p>
     <p class="text-center text-muted">
       <small>* but i am not sure of that.</small>
@@ -159,7 +162,9 @@ $('#my-slider').awesomeSlider("method name","option");
 	<script src="js/awesome-jquery-slider.js"></script>
   <script>
     $(function() {
-      $('#my-slider').awesomeSlider();
+      $('#my-slider').awesomeSlider({
+        autoplay : true,
+      });
     });
   </script>
 
