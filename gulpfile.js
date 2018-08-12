@@ -15,7 +15,7 @@ var gulp          = require('gulp'),
 gulp.task('browser-sync', function() {
 	browserSync({
 		server: {
-			baseDir: 'app'
+			baseDir: 'demo'
 		},
 		notify: false,
 		// open: false,
@@ -25,29 +25,42 @@ gulp.task('browser-sync', function() {
 });
 
 gulp.task('styles', function() {
-	return gulp.src('app/'+syntax+'/**/*.'+syntax+'')
-	.pipe(sass({ outputStyle: 'expanded' }).on("error", notify.onError()))
-	.pipe(rename({ suffix: '.min', prefix : '' }))
-	.pipe(autoprefixer(['last 15 versions']))
-	.pipe(cleancss( {level: { 1: { specialComments: 0 } } })) // Opt., comment out when debugging
-	.pipe(gulp.dest('app/css'))
-	.pipe(browserSync.stream())
+  gulp.src('src/sass/awesome-jquery-slider.sass')
+    .pipe(sass({ outputStyle: 'expanded' }).on("error", notify.onError()))
+    .pipe(autoprefixer(['last 15 versions']))
+    .pipe(gulp.dest('dist/'))
+    .pipe(cleancss( {level: { 1: { specialComments: 0 } } })) // Opt., comment out when debugging
+    .pipe(rename({ suffix: '.min', prefix : '' }))
+    .pipe(gulp.dest('demo/css'))
+    .pipe(gulp.dest('dist/'))
+    .pipe(browserSync.stream())
+  gulp.src('src/sass/demo.sass')
+    .pipe(sass({ outputStyle: 'expanded' }).on("error", notify.onError()))
+    .pipe(autoprefixer(['last 15 versions']))
+    .pipe(gulp.dest('demo/css'))
+    .pipe(browserSync.stream())
 });
 
 gulp.task('js', function() {
-	return gulp.src([
-		'app/js/awesome-jquery-slider.js',
+	gulp.src([
+		'src/js/awesome-jquery-slider.js'
 		])
+	.pipe(gulp.dest('demo/js'))
+	.pipe(gulp.dest('dist/'))
 	.pipe(concat('awesome-jquery-slider.min.js'))
-	.pipe(uglify()) // Mifify js (opt.)
-	.pipe(gulp.dest('app/js'))
+	// .pipe(uglify())
+	.pipe(gulp.dest('dist/'))
 	.pipe(browserSync.reload({ stream: true }))
+	gulp.src([
+		'src/libs/jquery/dist/jquery.min.js'
+		])
+	.pipe(gulp.dest('demo/js'))
 });
 
 gulp.task('rsync', function() {
-	return gulp.src('app/**')
+	return gulp.src('demo/**')
 	.pipe(rsync({
-		root: 'app/',
+		root: 'demo/',
 		hostname: 'username@yousite.com',
 		destination: 'yousite/public_html/',
 		// include: ['*.htaccess'], // Includes files to deploy
@@ -60,9 +73,9 @@ gulp.task('rsync', function() {
 });
 
 gulp.task('watch', ['styles', 'js', 'browser-sync'], function() {
-	gulp.watch('app/'+syntax+'/**/*.'+syntax+'', ['styles']);
-	gulp.watch(['libs/**/*.js', 'app/js/common.js'], ['js']);
-	gulp.watch('app/*.html', browserSync.reload)
+	gulp.watch('src/'+syntax+'/**/*.'+syntax+'', ['styles']);
+	gulp.watch(['libs/**/*.js', 'src/js/*.js'], ['js']);
+	gulp.watch('demo/*.html', browserSync.reload)
 });
 
 gulp.task('default', ['watch']);
