@@ -47,8 +47,8 @@ gulp.task('js', function() {
 		])
 	.pipe(gulp.dest('demo/js'))
 	.pipe(gulp.dest('dist/'))
+	.pipe(uglify())
 	.pipe(concat('awesome-jquery-slider.min.js'))
-	// .pipe(uglify())
 	.pipe(gulp.dest('dist/'))
 	.pipe(browserSync.reload({ stream: true }))
 	gulp.src([

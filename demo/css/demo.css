@@ -122,6 +122,14 @@ tr, td, th {
   }
 }
 
+.demo-page .container {
+  margin-bottom: 45px;
+}
+
+.demo-page h1 {
+  margin-bottom: 20px;
+}
+
 @media (max-width: 960px) {
   body {
     padding-top: 90px;
